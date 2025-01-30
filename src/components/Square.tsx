@@ -17,16 +17,28 @@ const Square: React.FC<SquareProps> = ({
   isValidMove,
   onClick,
 }) => {
-  const getPieceSymbol = (type: string) => {
-    const symbols: { [key: string]: string } = {
-      pawn: '♟',
-      rook: '♜',
-      knight: '♞',
-      bishop: '♝',
-      queen: '♛',
-      king: '♚',
-    };
-    return symbols[type] || '';
+  const getPieceSymbol = (type: string, color: string) => {
+    if (color === 'white') {
+      const symbols: { [key: string]: string } = {
+        king: '♔',
+        queen: '♕',
+        rook: '♖',
+        bishop: '♗',
+        knight: '♘',
+        pawn: '♙',
+      };
+      return symbols[type] || '';
+    } else {
+      const symbols: { [key: string]: string } = {
+        king: '♚',
+        queen: '♛',
+        rook: '♜',
+        bishop: '♝',
+        knight: '♞',
+        pawn: '♟',
+      };
+      return symbols[type] || '';
+    }
   };
 
   return (
@@ -57,7 +69,7 @@ const Square: React.FC<SquareProps> = ({
             'hover:scale-105 transform-gpu'
           )}
         >
-          {getPieceSymbol(piece.type)}
+          {getPieceSymbol(piece.type, piece.color)}
         </span>
       )}
       {isValidMove && !piece && (
