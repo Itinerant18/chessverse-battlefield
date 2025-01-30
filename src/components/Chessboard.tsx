@@ -69,7 +69,7 @@ const Chessboard = () => {
 
   return (
     <div className="w-full max-w-2xl aspect-square p-4">
-      <div className="grid grid-cols-8 gap-0 w-full h-full border border-primary/20 rounded-lg overflow-hidden shadow-xl">
+      <div className="grid grid-cols-8 gap-0 w-full h-full border border-primary/20 rounded-lg overflow-hidden shadow-xl transform perspective-[1000px] rotate-x-1 hover:rotate-x-2 transition-transform duration-500">
         {Array.from({ length: 8 }, (_, y) =>
           Array.from({ length: 8 }, (_, x) => {
             const isWhite = (x + y) % 2 === 0;
