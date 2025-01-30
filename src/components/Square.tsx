@@ -1,10 +1,12 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { ChessPiece } from '@/types/chess';
 
 interface SquareProps {
   isWhite: boolean;
-  piece?: { type: string; color: string };
+  piece?: ChessPiece;
   isSelected?: boolean;
+  isValidMove?: boolean;
   onClick: () => void;
 }
 
@@ -12,6 +14,7 @@ const Square: React.FC<SquareProps> = ({
   isWhite,
   piece,
   isSelected,
+  isValidMove,
   onClick,
 }) => {
   const getPieceSymbol = (type: string) => {
@@ -29,9 +32,10 @@ const Square: React.FC<SquareProps> = ({
   return (
     <div
       className={cn(
-        'aspect-square flex items-center justify-center transition-colors duration-200',
+        'aspect-square flex items-center justify-center transition-colors duration-200 relative',
         isWhite ? 'bg-surface' : 'bg-primary/10',
         isSelected && 'bg-accent/20',
+        isValidMove && 'bg-green-500/20',
         'hover:bg-accent/10'
       )}
       onClick={onClick}
@@ -46,6 +50,9 @@ const Square: React.FC<SquareProps> = ({
         >
           {getPieceSymbol(piece.type)}
         </span>
+      )}
+      {isValidMove && !piece && (
+        <div className="absolute w-3 h-3 rounded-full bg-green-500/40" />
       )}
     </div>
   );
