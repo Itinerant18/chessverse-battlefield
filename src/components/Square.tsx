@@ -33,7 +33,7 @@ const Square: React.FC<SquareProps> = ({
     <div
       className={cn(
         'aspect-square flex items-center justify-center transition-colors duration-200 relative',
-        isWhite ? 'bg-surface' : 'bg-primary/10',
+        isWhite ? 'bg-[#F1F1F1] shadow-inner' : 'bg-[#0006] shadow-md',
         isSelected && 'bg-accent/20',
         isValidMove && 'bg-green-500/20',
         'hover:bg-accent/10'
@@ -44,7 +44,7 @@ const Square: React.FC<SquareProps> = ({
         <span
           className={cn(
             'text-4xl transition-transform duration-300',
-            piece.color === 'white' ? 'text-primary' : 'text-primary/80',
+            piece.color === 'white' ? 'text-[#222222]' : 'text-[#333333]',
             isSelected && 'scale-110'
           )}
         >
