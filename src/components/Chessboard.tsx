@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Square from './Square';
 import { cn } from '@/lib/utils';
-import { ChessPiece, Position, PieceType } from '../types/chess';
-import { isValidMove, getValidMoves } from '../utils/chessLogic';
+import { ChessPiece, Position, PieceType } from '@/types/chess';
+import { isValidMove, getValidMoves } from '@/utils/chessLogic';
 import { useToast } from '@/components/ui/use-toast';
 
 interface ChessboardProps {

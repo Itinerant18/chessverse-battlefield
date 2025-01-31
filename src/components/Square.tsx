@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { ChessPiece } from '../types/chess';
+import { ChessPiece } from '@/types/chess';
 
 interface SquareProps {
   isWhite: boolean;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Chessboard from '@/frontend/components/Chessboard';
-import GameInfo from '@/frontend/components/GameInfo';
+import Chessboard from '@/components/Chessboard';
+import GameInfo from '@/components/GameInfo';
 
 const Index = () => {
   const [currentTurn, setCurrentTurn] = useState<'white' | 'black'>('white');
