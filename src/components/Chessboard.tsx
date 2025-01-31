@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Square from './Square';
 import { cn } from '@/lib/utils';
-import { ChessPiece, Position } from '@/types/chess';
+import { ChessPiece, Position, PieceType } from '@/types/chess';
 import { isValidMove, getValidMoves } from '@/utils/chessLogic';
 import { useToast } from '@/components/ui/use-toast';
 

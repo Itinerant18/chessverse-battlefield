@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 const GameInfo = ({ currentTurn }: { currentTurn: 'white' | 'black' }) => {
   return (

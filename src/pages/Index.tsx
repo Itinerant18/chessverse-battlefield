@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Chessboard from '@/components/Chessboard';
 import GameInfo from '@/components/GameInfo';
 
 const Index = () => {
+  const [currentTurn, setCurrentTurn] = useState<'white' | 'black'>('white');
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
@@ -16,7 +18,7 @@ const Index = () => {
             <Chessboard />
           </div>
           <div className="lg:w-80">
-            <GameInfo />
+            <GameInfo currentTurn={currentTurn} />
           </div>
         </div>
       </div>
