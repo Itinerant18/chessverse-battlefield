@@ -33,16 +33,18 @@ const Chessboard = () => {
   const handleSquareClick = (x: number, y: number) => {
     const clickedPiece = pieces.get(`${x},${y}`);
     
-    // If no square is selected and we clicked on a piece of the current turn's color
     if (!selectedSquare) {
       if (clickedPiece && clickedPiece.color === currentTurn) {
         setSelectedSquare({ x, y });
-        setValidMoves(getValidMoves({ x, y }, clickedPiece, pieces));
+        const moves = getValidMoves({ x, y }, clickedPiece, pieces);
+        setValidMoves(moves);
+        
+        // Add sound effect for piece selection
+        new Audio('/sounds/select.mp3').play().catch(() => {});
       }
     } else {
       const selectedPiece = pieces.get(`${selectedSquare.x},${selectedSquare.y}`);
       
-      // If clicking on a different square
       if (selectedSquare.x !== x || selectedSquare.y !== y) {
         if (selectedPiece && isValidMove(selectedSquare, { x, y }, selectedPiece, pieces)) {
           // Make the move
@@ -53,7 +55,9 @@ const Chessboard = () => {
           setPieces(newPieces);
           setCurrentTurn(currentTurn === 'white' ? 'black' : 'white');
           
-          // Show move notification
+          // Add move sound effect
+          new Audio('/sounds/move.mp3').play().catch(() => {});
+          
           toast({
             title: `${selectedPiece.color.charAt(0).toUpperCase() + selectedPiece.color.slice(1)} moved ${selectedPiece.type}`,
             duration: 2000,
@@ -61,7 +65,6 @@ const Chessboard = () => {
         }
       }
       
-      // Reset selection
       setSelectedSquare(null);
       setValidMoves([]);
     }
@@ -69,7 +72,7 @@ const Chessboard = () => {
 
   return (
     <div className="w-full max-w-2xl aspect-square p-4">
-      <div className="grid grid-cols-8 gap-0 w-full h-full border border-primary/20 rounded-lg overflow-hidden shadow-xl transform perspective-[1000px] rotate-x-1 hover:rotate-x-2 transition-transform duration-500">
+      <div className="grid grid-cols-8 gap-0 w-full h-full border-4 border-primary/20 rounded-lg overflow-hidden shadow-2xl transform perspective-[1000px] rotate-x-1 hover:rotate-x-2 transition-transform duration-500 bg-gradient-to-br from-surface to-surface/80">
         {Array.from({ length: 8 }, (_, y) =>
           Array.from({ length: 8 }, (_, x) => {
             const isWhite = (x + y) % 2 === 0;

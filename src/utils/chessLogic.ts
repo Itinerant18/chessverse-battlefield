@@ -20,11 +20,16 @@ export const isValidMove = (
     return false;
   }
 
+  // Check path obstruction for all pieces except knights
+  if (piece.type !== 'knight' && isPathObstructed(from, to, board)) {
+    return false;
+  }
+
   switch (piece.type) {
     case 'pawn':
       return isValidPawnMove(from, to, piece.color, board);
     case 'rook':
-      return isValidRookMove(from, to, board);
+      return isValidRookMove(from, to);
     case 'knight':
       return dx * dy === 2; // L-shape movement
     case 'bishop':
@@ -36,6 +41,27 @@ export const isValidMove = (
     default:
       return false;
   }
+};
+
+const isPathObstructed = (
+  from: Position,
+  to: Position,
+  board: Map<string, ChessPiece>
+): boolean => {
+  const dx = Math.sign(to.x - from.x);
+  const dy = Math.sign(to.y - from.y);
+  let x = from.x + dx;
+  let y = from.y + dy;
+  
+  while (x !== to.x || y !== to.y) {
+    if (board.has(`${x},${y}`)) {
+      return true;
+    }
+    x += dx;
+    y += dy;
+  }
+  
+  return false;
 };
 
 const isValidPawnMove = (
@@ -66,26 +92,8 @@ const isValidPawnMove = (
   return false;
 };
 
-const isValidRookMove = (
-  from: Position,
-  to: Position,
-  board: Map<string, ChessPiece>
-): boolean => {
-  if (from.x !== to.x && from.y !== to.y) return false;
-  
-  const dx = Math.sign(to.x - from.x);
-  const dy = Math.sign(to.y - from.y);
-  
-  let x = from.x + dx;
-  let y = from.y + dy;
-  
-  while (x !== to.x || y !== to.y) {
-    if (board.has(`${x},${y}`)) return false;
-    x += dx;
-    y += dy;
-  }
-  
-  return true;
+const isValidRookMove = (from: Position, to: Position): boolean => {
+  return from.x === to.x || from.y === to.y;
 };
 
 export const getValidMoves = (
