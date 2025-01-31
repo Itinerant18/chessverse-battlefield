@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Square from './Square';
 import { cn } from '@/lib/utils';
 import { ChessPiece, Position, PieceType } from '@/types/chess';
 import { isValidMove, getValidMoves } from '@/utils/chessLogic';
 import { useToast } from '@/components/ui/use-toast';
 
-const Chessboard = () => {
+interface ChessboardProps {
+  onTurnChange?: (turn: 'white' | 'black') => void;
+}
+
+const Chessboard: React.FC<ChessboardProps> = ({ onTurnChange }) => {
   const [selectedSquare, setSelectedSquare] = useState<Position | null>(null);
   const [pieces, setPieces] = useState(initializeBoard());
   const [currentTurn, setCurrentTurn] = useState<'white' | 'black'>('white');
   const [validMoves, setValidMoves] = useState<Position[]>([]);
+  const [captureSquare, setCaptureSquare] = useState<Position | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    onTurnChange?.(currentTurn);
+  }, [currentTurn, onTurnChange]);
 
   function initializeBoard() {
     const initialPieces = new Map<string, ChessPiece>();
@@ -40,6 +49,7 @@ const Chessboard = () => {
         setSelectedSquare({ x, y });
         const moves = getValidMoves({ x, y }, clickedPiece, pieces);
         setValidMoves(moves);
+        setCaptureSquare(null);
         
         new Audio('/sounds/select.mp3').play().catch(() => {});
       }
@@ -50,18 +60,29 @@ const Chessboard = () => {
         // Moving a piece
         if (isValidMove(selectedSquare, { x, y }, selectedPiece, pieces)) {
           const newPieces = new Map(pieces);
+          const capturedPiece = pieces.get(`${x},${y}`);
+          
           newPieces.delete(`${selectedSquare.x},${selectedSquare.y}`);
           newPieces.set(`${x},${y}`, selectedPiece);
           
           setPieces(newPieces);
           setCurrentTurn(currentTurn === 'white' ? 'black' : 'white');
           
-          new Audio('/sounds/move.mp3').play().catch(() => {});
+          if (capturedPiece) {
+            setCaptureSquare({ x, y });
+            toast({
+              title: `${selectedPiece.color.charAt(0).toUpperCase() + selectedPiece.color.slice(1)} captured ${capturedPiece.type}!`,
+              duration: 2000,
+            });
+          } else {
+            setCaptureSquare(null);
+            toast({
+              title: `${selectedPiece.color.charAt(0).toUpperCase() + selectedPiece.color.slice(1)} moved ${selectedPiece.type}`,
+              duration: 2000,
+            });
+          }
           
-          toast({
-            title: `${selectedPiece.color.charAt(0).toUpperCase() + selectedPiece.color.slice(1)} moved ${selectedPiece.type}`,
-            duration: 2000,
-          });
+          new Audio('/sounds/move.mp3').play().catch(() => {});
         }
       }
       
@@ -79,6 +100,7 @@ const Chessboard = () => {
             const piece = pieces.get(`${x},${y}`);
             const isSelected = selectedSquare?.x === x && selectedSquare?.y === y;
             const isValidMove = validMoves.some(move => move.x === x && move.y === y);
+            const isCapture = captureSquare?.x === x && captureSquare?.y === y;
 
             return (
               <Square
@@ -87,6 +109,7 @@ const Chessboard = () => {
                 piece={piece}
                 isSelected={isSelected}
                 isValidMove={isValidMove}
+                isCapture={isCapture}
                 onClick={() => handleSquareClick(x, y)}
               />
             );

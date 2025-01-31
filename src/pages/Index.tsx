@@ -15,7 +15,7 @@ const Index = () => {
 
         <div className="grid lg:grid-cols-[1fr,auto] gap-8 items-start">
           <div className="flex justify-center">
-            <Chessboard />
+            <Chessboard onTurnChange={setCurrentTurn} />
           </div>
           <div className="lg:w-80">
             <GameInfo currentTurn={currentTurn} />
