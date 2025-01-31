@@ -13,7 +13,8 @@ const Chessboard = () => {
   const { toast } = useToast();
 
   function initializeBoard() {
-    const initialPieces = new Map();
+    const initialPieces = new Map<string, ChessPiece>();
+    
     // Set up pawns
     for (let i = 0; i < 8; i++) {
       initialPieces.set(`${i},1`, { type: 'pawn', color: 'black' });
@@ -21,7 +22,7 @@ const Chessboard = () => {
     }
     
     // Set up other pieces
-    const backRow = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'];
+    const backRow: PieceType[] = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'];
     for (let i = 0; i < 8; i++) {
       initialPieces.set(`${i},0`, { type: backRow[i], color: 'black' });
       initialPieces.set(`${i},7`, { type: backRow[i], color: 'white' });
@@ -34,20 +35,20 @@ const Chessboard = () => {
     const clickedPiece = pieces.get(`${x},${y}`);
     
     if (!selectedSquare) {
+      // Selecting a piece
       if (clickedPiece && clickedPiece.color === currentTurn) {
         setSelectedSquare({ x, y });
         const moves = getValidMoves({ x, y }, clickedPiece, pieces);
         setValidMoves(moves);
         
-        // Add sound effect for piece selection
         new Audio('/sounds/select.mp3').play().catch(() => {});
       }
     } else {
       const selectedPiece = pieces.get(`${selectedSquare.x},${selectedSquare.y}`);
       
-      if (selectedSquare.x !== x || selectedSquare.y !== y) {
-        if (selectedPiece && isValidMove(selectedSquare, { x, y }, selectedPiece, pieces)) {
-          // Make the move
+      if (selectedPiece) {
+        // Moving a piece
+        if (isValidMove(selectedSquare, { x, y }, selectedPiece, pieces)) {
           const newPieces = new Map(pieces);
           newPieces.delete(`${selectedSquare.x},${selectedSquare.y}`);
           newPieces.set(`${x},${y}`, selectedPiece);
@@ -55,7 +56,6 @@ const Chessboard = () => {
           setPieces(newPieces);
           setCurrentTurn(currentTurn === 'white' ? 'black' : 'white');
           
-          // Add move sound effect
           new Audio('/sounds/move.mp3').play().catch(() => {});
           
           toast({

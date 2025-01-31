@@ -6,9 +6,6 @@ export const isValidMove = (
   piece: ChessPiece,
   board: Map<string, ChessPiece>
 ): boolean => {
-  const dx = Math.abs(to.x - from.x);
-  const dy = Math.abs(to.y - from.y);
-  
   // Basic boundary check
   if (to.x < 0 || to.x > 7 || to.y < 0 || to.y > 7) {
     return false;
@@ -20,27 +17,94 @@ export const isValidMove = (
     return false;
   }
 
-  // Check path obstruction for all pieces except knights
-  if (piece.type !== 'knight' && isPathObstructed(from, to, board)) {
-    return false;
-  }
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const absDx = Math.abs(dx);
+  const absDy = Math.abs(dy);
 
   switch (piece.type) {
     case 'pawn':
       return isValidPawnMove(from, to, piece.color, board);
     case 'rook':
-      return isValidRookMove(from, to);
+      return isValidRookMove(from, to, board);
     case 'knight':
-      return dx * dy === 2; // L-shape movement
+      return isValidKnightMove(absDx, absDy);
     case 'bishop':
-      return dx === dy; // Diagonal movement
+      return isValidBishopMove(from, to, board);
     case 'queen':
-      return dx === dy || dx === 0 || dy === 0;
+      return isValidQueenMove(from, to, board);
     case 'king':
-      return dx <= 1 && dy <= 1;
+      return isValidKingMove(absDx, absDy);
     default:
       return false;
   }
+};
+
+const isValidPawnMove = (
+  from: Position,
+  to: Position,
+  color: PieceColor,
+  board: Map<string, ChessPiece>
+): boolean => {
+  const direction = color === 'white' ? -1 : 1;
+  const startRow = color === 'white' ? 6 : 1;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+
+  // Forward movement
+  if (dx === 0) {
+    if (dy === direction) {
+      return !board.has(`${to.x},${to.y}`);
+    }
+    // First move can be 2 squares
+    if (from.y === startRow && dy === 2 * direction) {
+      const intermediateY = from.y + direction;
+      return !board.has(`${to.x},${to.y}`) && !board.has(`${to.x},${intermediateY}`);
+    }
+  }
+
+  // Capture movement
+  if (Math.abs(dx) === 1 && dy === direction) {
+    return board.has(`${to.x},${to.y}`);
+  }
+
+  return false;
+};
+
+const isValidRookMove = (
+  from: Position,
+  to: Position,
+  board: Map<string, ChessPiece>
+): boolean => {
+  return (from.x === to.x || from.y === to.y) && !isPathObstructed(from, to, board);
+};
+
+const isValidKnightMove = (absDx: number, absDy: number): boolean => {
+  return (absDx === 2 && absDy === 1) || (absDx === 1 && absDy === 2);
+};
+
+const isValidBishopMove = (
+  from: Position,
+  to: Position,
+  board: Map<string, ChessPiece>
+): boolean => {
+  const absDx = Math.abs(to.x - from.x);
+  const absDy = Math.abs(to.y - from.y);
+  return absDx === absDy && !isPathObstructed(from, to, board);
+};
+
+const isValidQueenMove = (
+  from: Position,
+  to: Position,
+  board: Map<string, ChessPiece>
+): boolean => {
+  const absDx = Math.abs(to.x - from.x);
+  const absDy = Math.abs(to.y - from.y);
+  return ((absDx === absDy) || (from.x === to.x || from.y === to.y)) && !isPathObstructed(from, to, board);
+};
+
+const isValidKingMove = (absDx: number, absDy: number): boolean => {
+  return absDx <= 1 && absDy <= 1;
 };
 
 const isPathObstructed = (
@@ -52,7 +116,7 @@ const isPathObstructed = (
   const dy = Math.sign(to.y - from.y);
   let x = from.x + dx;
   let y = from.y + dy;
-  
+
   while (x !== to.x || y !== to.y) {
     if (board.has(`${x},${y}`)) {
       return true;
@@ -60,40 +124,8 @@ const isPathObstructed = (
     x += dx;
     y += dy;
   }
-  
-  return false;
-};
 
-const isValidPawnMove = (
-  from: Position,
-  to: Position,
-  color: PieceColor,
-  board: Map<string, ChessPiece>
-): boolean => {
-  const direction = color === 'white' ? -1 : 1;
-  const startRow = color === 'white' ? 6 : 1;
-  
-  // Forward movement
-  if (to.x === from.x) {
-    if (to.y === from.y + direction) {
-      return !board.has(`${to.x},${to.y}`);
-    }
-    // First move can be 2 squares
-    if (from.y === startRow && to.y === from.y + 2 * direction) {
-      return !board.has(`${to.x},${to.y}`) && !board.has(`${to.x},${from.y + direction}`);
-    }
-  }
-  
-  // Capture movement
-  if (Math.abs(to.x - from.x) === 1 && to.y === from.y + direction) {
-    return board.has(`${to.x},${to.y}`);
-  }
-  
   return false;
-};
-
-const isValidRookMove = (from: Position, to: Position): boolean => {
-  return from.x === to.x || from.y === to.y;
 };
 
 export const getValidMoves = (
@@ -102,7 +134,7 @@ export const getValidMoves = (
   board: Map<string, ChessPiece>
 ): Position[] => {
   const validMoves: Position[] = [];
-  
+
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 8; y++) {
       if (isValidMove(position, { x, y }, piece, board)) {
@@ -110,6 +142,6 @@ export const getValidMoves = (
       }
     }
   }
-  
+
   return validMoves;
 };
