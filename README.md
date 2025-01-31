@@ -35,6 +35,7 @@ npm run dev
 - Select the "Codespaces" tab.
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
+![Screenshot (2)](https://github.com/user-attachments/assets/2df271d8-776e-41de-92d3-18b96f6ad23c)
 
 ## What technologies are used for this project?
 
@@ -51,3 +52,5 @@ This project is built with .
 ## I want to use a custom domain - is that possible?
 
 We don't support custom domains (yet). If you want to deploy your project under your domain, we recommend using Netlify.
+
+
