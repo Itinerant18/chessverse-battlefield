@@ -1,4 +1,4 @@
-
+![Screenshot (2)](https://github.com/user-attachments/assets/2df271d8-776e-41de-92d3-18b96f6ad23c)
 
 **Use your preferred IDE**
 
@@ -35,7 +35,7 @@ npm run dev
 - Select the "Codespaces" tab.
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
-![Screenshot (2)](https://github.com/user-attachments/assets/2df271d8-776e-41de-92d3-18b96f6ad23c)
+
 
 ## What technologies are used for this project?
 
