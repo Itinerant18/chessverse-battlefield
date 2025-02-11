@@ -1,5 +1,5 @@
 ![Screenshot (2)](https://github.com/user-attachments/assets/2df271d8-776e-41de-92d3-18b96f6ad23c)
-
+https://cheeseverse.netlify.app/
 **Use your preferred IDE**
 
 If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
