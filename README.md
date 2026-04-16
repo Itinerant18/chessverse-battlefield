@@ -66,9 +66,10 @@ ChessVerse Battlefield provides:
 ---
 
 ## 🏗️ Architecture Diagram
+'''
 
-```
 graph TD
+
     %% Global Styles
     classDef component fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
     classDef logic fill:#f1f8e9,stroke:#33691e,stroke-width:2px;
@@ -119,63 +120,8 @@ graph TD
     class Chessboard,Squares,GameInfo component;
     class State,Utils,Toast logic;
     class User userAction;
-```
-## System Architecture & Interaction Flow
-
-```mermaid
-graph TD
-    %% (
-    %% Global Styles
-    classDef component fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef logic fill:#f1f8e9,stroke:#33691e,stroke-width:2px;
-    classDef userAction fill:#fff3e0,stroke:#e65100,stroke-width:2px,stroke-dasharray: 5 5;
-
-    subgraph UI_Layer ["Frontend UI (React Components)"]
-        App["App.tsx (Providers)"]
-        Index["pages/Index"]
-        Chessboard["Chessboard.tsx"]
-        Squares["Square.tsx (x64)"]
-        GameInfo["GameInfo.tsx"]
-        
-        App --> Index
-        Index --> Chessboard
-        Index --> GameInfo
-        Chessboard --> Squares
-    end
-
-    subgraph State_Logic ["State & Logic Layer"]
-        State[("React State<br/>- pieces Map<br/>- currentTurn<br/>- selectedSquare<br/>- validMoves")]
-        Utils["chessLogic.ts<br/>- isValidMove()<br/>- getValidMoves()"]
-        Toast["use-toast.ts<br/>- Notifications"]
-    end
-
-    %% Interaction Flow
-    User((User)) -- "1. Clicks Square" --> Squares
-    Squares -- "2. Trigger Click" --> Chessboard
-    
-    Chessboard -- "3. handleSquareClick(x, y)" --> Utils
-    
-    subgraph Decision_Node ["Logic Decision"]
-        Utils --> ValidCheck{Is Piece Selected?}
-        ValidCheck -- "No" --> GetMoves["getValidMoves()"]
-        ValidCheck -- "Yes" --> MoveCheck["isValidMove()"]
-    end
-
-    GetMoves --> UpdateHints["4. setValidMoves(...)"]
-    UpdateHints -.->|Re-render| Squares
-    
-    MoveCheck -- "Valid Move" --> UpdateState["5. Update pieces Map<br/>+ Flip Turn"]
-    UpdateState --> State
-    
-    State -.->|6. Effect| Toast
-    State -.->|7. Re-render| GameInfo
-    State -.->|8. Re-render| Chessboard
-
-    %% Styling
-    class Chessboard,Squares,GameInfo component;
-    class State,Utils,Toast logic;
-    class User userAction;)
-```
+   
+'''
 ### Data Flow
 
 ```
