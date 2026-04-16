@@ -68,54 +68,6 @@ ChessVerse Battlefield provides:
 ## 🏗️ Architecture Diagram
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                          Browser (SPA)                           │
-│                                                                  │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                         App.tsx                             │ │
-│  │  ┌─────────────────┐  ┌──────────┐  ┌──────────────────┐   │ │
-│  │  │ QueryClientPro- │  │ Tooltip  │  │  BrowserRouter   │   │ │
-│  │  │ vider (TanStack)│  │ Provider │  │  (react-router)  │   │ │
-│  │  └────────┬────────┘  └──────────┘  └────────┬─────────┘   │ │
-│  │           │                                   │             │ │
-│  │           └──────────────┬────────────────────┘             │ │
-│  │                          │                                  │ │
-│  │                  ┌───────▼───────┐                          │ │
-│  │                  │  pages/Index  │  ← Route "/"             │ │
-│  │                  │               │                          │ │
-│  │          ┌───────┴──────┐ ┌──────┴──────┐                  │ │
-│  │          │  Chessboard  │ │  GameInfo   │                   │ │
-│  │          │  Component   │ │  Component  │                   │ │
-│  │          └──────┬───────┘ └─────────────┘                  │ │
-│  │                 │                                           │ │
-│  │        ┌────────▼──────────┐                               │ │
-│  │        │   Square (×64)    │  ← One per board cell         │ │
-│  │        │  Component        │                               │ │
-│  │        └────────┬──────────┘                               │ │
-│  │                 │                                           │ │
-│  └─────────────────┼───────────────────────────────────────────┘ │
-│                    │                                              │
-│  ┌─────────────────▼───────────────────────────────────────────┐ │
-│  │              State & Logic Layer                            │ │
-│  │                                                             │ │
-│  │  ┌──────────────────────────┐  ┌──────────────────────┐    │ │
-│  │  │  Chessboard useState     │  │  utils/chessLogic.ts │    │ │
-│  │  │  - pieces: Map<key,Piece>│◄─┤  - isValidMove()     │    │ │
-│  │  │  - currentTurn           │  │  - getValidMoves()   │    │ │
-│  │  │  - selectedSquare        │  │  - isValidPawnMove() │    │ │
-│  │  │  - validMoves            │  │  - isValidRookMove() │    │ │
-│  │  │  - captureSquare         │  │  - isPathObstructed()│    │ │
-│  │  └──────────────────────────┘  └──────────────────────┘    │ │
-│  │                                                             │ │
-│  │  ┌──────────────────────────┐  ┌──────────────────────┐    │ │
-│  │  │  types/chess.ts          │  │  hooks/use-toast.ts  │    │ │
-│  │  │  - ChessPiece interface  │  │  - Toast state mgmt  │    │ │
-│  │  │  - Position interface    │  └──────────────────────┘    │ │
-│  │  │  - Move interface        │                              │ │
-│  │  │  - PieceType / PieceColor│                              │ │
-│  │  └──────────────────────────┘                              │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────────────┘
 graph TD
     %% Global Styles
     classDef component fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
