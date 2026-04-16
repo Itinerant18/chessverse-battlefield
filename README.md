@@ -1,8 +1,4 @@
-Here is the complete, finalized `README.md` file. I have formatted it inside a single markdown block so you can copy it with one click and paste it directly into your project.
 
-It includes the correct Mermaid.js syntax for both the architecture and the data flow, plus all the technical documentation we discussed.
-
-```markdown
 # ♟️ ChessVerse Battlefield
 
 > A polished, fully-playable local-multiplayer chess game built entirely in the browser — no server, no account, no downloads required.
